@@ -14,7 +14,6 @@ public class BinomialHeap
 
     public BinomialHeap(){
         size = 0;
-        //treeCount = 0;
         first = new HeapNode();
         last = first;
         last.next = first;
@@ -22,7 +21,6 @@ public class BinomialHeap
     }
     public BinomialHeap(HeapNode root){
         size = 1;
-        //treeCount = 1;
         first = root;
         last = first;
         last.next = first;
@@ -94,7 +92,7 @@ public class BinomialHeap
         min.next = null;
 
         if(first == min){
-            min = last.next;
+            first = last.next;
         }
         else if(last == min){
             last = it;
@@ -175,6 +173,13 @@ public class BinomialHeap
 
     public void meld(BinomialHeap heap2)
     {
+        if(this.empty()){
+            this.first = heap2.first;
+            this.last = heap2.last;
+            this.size = heap2.size;
+            this.min = heap2.min;
+            return;
+        }
         HeapNode sentinel = new HeapNode();
         HeapNode lst = sentinel;
 
