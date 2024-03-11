@@ -17,6 +17,7 @@ public class BinomialHeap
         treeCount = 0;
         first = new HeapNode();
         last = first;
+        last.next = first;
         min = first;
     }
     public BinomialHeap(HeapNode root){
@@ -24,6 +25,7 @@ public class BinomialHeap
         treeCount = 1;
         first = root;
         last = first;
+        last.next = first;
         min = first;
     }
 
@@ -48,7 +50,7 @@ public class BinomialHeap
      */
     public void deleteMin()
     {
-        
+
         return;
     }
 
@@ -71,6 +73,19 @@ public class BinomialHeap
      */
     public void decreaseKey(HeapItem item, int diff)
     {
+        item.key -= diff;
+        HeapNode vertex = item.node;
+        HeapNode parent = vertex.parent;
+        while(parent != null && item.key < parent.item.key){
+            HeapItem it = parent.item;
+            parent.item = item;
+            item.node = parent;
+            it.node = vertex;
+            vertex.item = it;
+
+            vertex = parent;
+            parent = parent.parent;
+        }
         return;
     }
 
@@ -245,10 +260,15 @@ public class BinomialHeap
         if(carry.isReal){
             lst.next = carry;
             lst = lst.next;
+            this.last = carry;
             carry = new HeapNode();
+        }
+        else if(this.size < heap2.size()){
+            last = heap2.last;
         }
 
         this.first = sentinel.next;
+        last.next = first;
         if(this.size == 0 || this.min.item.key > heap2.min.item.key){
             this.min = heap2.min;
         }
