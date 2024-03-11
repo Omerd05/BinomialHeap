@@ -48,6 +48,7 @@ public class BinomialHeap
      */
     public void deleteMin()
     {
+        
         return;
     }
 
@@ -70,7 +71,7 @@ public class BinomialHeap
      */
     public void decreaseKey(HeapItem item, int diff)
     {
-        return; // should be replaced by student code
+        return;
     }
 
     /**
@@ -262,7 +263,7 @@ public class BinomialHeap
      */
     public int size()
     {
-        return size; // should be replaced by student code
+        return size;
     }
 
     /**
@@ -286,7 +287,7 @@ public class BinomialHeap
         int cnt = 0;
         for(int k = 0; k < 31; k++){
             int tpow = (int)Math.pow(2,k);
-            if((tpow&size) == 1){
+            if((tpow&size) != 0){
                 cnt++;
             }
         }
@@ -324,12 +325,6 @@ public class BinomialHeap
             this.child.parent = this;
             rank++;
         }
-        /*public void setParent(HeapNode father){
-            parent.child.setChild(this.next);
-            parent = father;
-            this.next = father.child;
-            father.child = this;
-        }*/
     }
 
 
