@@ -10,7 +10,7 @@ public class BinomialHeap
     public HeapNode first;
     public HeapNode last;
     public HeapNode min;
-    //public int treeCount;
+    public int linksCount;
 
     public BinomialHeap(){
         size = 0;
@@ -27,7 +27,9 @@ public class BinomialHeap
         min = first;
     }
 
-    public BinomialHeap(HeapNode root, int size, int treesCnt){
+    //Special constructor - private use only, it is used for dealing with RemoveMin, as in the implemention
+    //We expect the list of nodes to be ordered by ranks.
+    private BinomialHeap(HeapNode root, int size, int treesCnt){
         HeapNode nodes[] = new HeapNode[treesCnt];
         for(int i = 0; i < treesCnt; i++){
             nodes[i] = null;
@@ -210,7 +212,7 @@ public class BinomialHeap
                     h2.setChild(h1);
                     carry = h2;
                 }
-
+                linksCount++;
                 flag1 = true;
                 flag2 = true;
             }
@@ -223,6 +225,7 @@ public class BinomialHeap
                         h1.setChild(carry);
                         carry = h1;
                     }
+                    linksCount++;
                 }
                 else {
                     if(carry.isReal){
@@ -245,6 +248,7 @@ public class BinomialHeap
                         h2.setChild(carry);
                         carry = h2;
                     }
+                    linksCount++;
                 }
                 else {
                     if(carry.isReal){
@@ -290,6 +294,7 @@ public class BinomialHeap
                         h1.setChild(carry);
                         carry = h1;
                     }
+                    linksCount++;
                 }
             }
             else{
@@ -318,6 +323,7 @@ public class BinomialHeap
                         h2.setChild(carry);
                         carry = h2;
                     }
+                    linksCount++;
                 }
             }
             else{
