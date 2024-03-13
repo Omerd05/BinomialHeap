@@ -4,6 +4,11 @@
  * An implementation of binomial heap over non-negative integers.
  * Based on exercise from previous semester.
  */
+
+//username - omerdrori
+//id1      - 216002089
+//#name1   - omer drori
+
 public class BinomialHeap
 {
     public int size;
@@ -13,6 +18,7 @@ public class BinomialHeap
     public int linksCount;
     public int ranksDeleted;
 
+    //O(1)
     public BinomialHeap(){
         size = 0;
         first = new HeapNode();
@@ -20,6 +26,8 @@ public class BinomialHeap
         last.next = first;
         min = first;
     }
+    //O(1)
+    //Used to deal with insert while melding
     public BinomialHeap(HeapNode root){
         size = 1;
         first = root;
@@ -28,8 +36,12 @@ public class BinomialHeap
         min = first;
     }
 
-    //Special constructor - private use only, it is used for dealing with RemoveMin, as in the implemention
-    //We expect the list of nodes to be ordered by ranks.
+    //Special constructor - PRIVATE USE only, it is used for dealing with RemoveMin, as in the implemention
+    //we expect the list of nodes to be ordered by ranks.
+    //the method reorder the nodes by ranks and then build it (as linking might cause unbalancing in ranks' order).
+    //important note - is that time complexity is O(logn) but we ONLY cally this function when we are doing removeMin -
+    //i.e. the time complexity is already O(logn).
+    //nodes is of length O(logn) then we use count sort to sort it quickly.
     private BinomialHeap(HeapNode root, int size, int treesCnt){
         HeapNode nodes[] = new HeapNode[treesCnt];
         for(int i = 0; i < treesCnt; i++){
@@ -63,7 +75,6 @@ public class BinomialHeap
 
         this.first = sentinel.next;
         this.last = curr;
-        //this.treeCount = treesCnt;
     }
 
     /**
@@ -73,6 +84,9 @@ public class BinomialHeap
      * Insert (key,info) into the heap and return the newly generated HeapItem.
      *
      */
+
+    //O(logn) WC, O(1) amortized as in binary addition.
+    //Melding with a heap of 1 node.
     public HeapItem insert(int key, String info)
     {
         HeapItem I = new HeapItem(null,key,info);
@@ -85,6 +99,12 @@ public class BinomialHeap
      * Delete the minimal item
      *
      */
+
+    //O(logn)
+    //retrieve the minimum, pull it from the (circular) linked list of trees
+    //Reorder the children of min and heapify them
+    //meld the new heap with the current one.
+    //Update all necessary information.
     public void deleteMin()
     {
         ranksDeleted += min.rank;
@@ -127,6 +147,8 @@ public class BinomialHeap
      * Return the minimal HeapItem
      *
      */
+
+    //O(1)
     public HeapItem findMin()
     {
         return min.item;
@@ -139,6 +161,10 @@ public class BinomialHeap
      * Decrease the key of item by diff and fix the heap.
      *
      */
+
+    //O(logn)
+    //heapify up the node
+    //we ONLY swap the items, to not cause changes in the pointers.
     public void decreaseKey(HeapItem item, int diff)
     {
         item.key -= diff;
@@ -162,6 +188,8 @@ public class BinomialHeap
      * Delete the item from the heap.
      *
      */
+
+    //O(logn) as O(logn)+O(logn) = O(logn)
     public void delete(HeapItem item)
     {
         this.decreaseKey(item,Integer.MAX_VALUE);
@@ -175,6 +203,19 @@ public class BinomialHeap
      *
      */
 
+    //O(logn)
+    //Abstract idea:
+    //in order to merge efficiently and comfortably, we will maintain our list of trees ordered by ranks!
+    //we treat edge cases where one of the heaps is empty.
+    //the merging process :
+    //we'll meld the lists as we add binary numbers, by using a carry.
+    //lst will be our output list, such that every element except the sentinel will appear on our outputlist.
+    //when we are sure that a node will appear on the output list, we make lst.next point to him, and move forward.
+    //when we finish traversing one of the lists, we check if there is a carry - if that's the case, we just add it
+    //normally.
+    //by the end of the process our list is done.
+    //min = min(heap1,heap2)
+    //size = size1 + size2
     public void meld(BinomialHeap heap2)
     {
         if(this.empty()){
@@ -357,7 +398,7 @@ public class BinomialHeap
             this.min = heap2.min;
         }
         this.size += heap2.size;
-        return; // should be replaced by student code
+        return;
     }
 
     /**
@@ -365,6 +406,8 @@ public class BinomialHeap
      * Return the number of elements in the heap
      *
      */
+
+    //O(1)
     public int size()
     {
         return size;
@@ -376,6 +419,7 @@ public class BinomialHeap
      * is empty.
      *
      */
+    //O(1)
     public boolean empty()
     {
         return size == 0;
@@ -386,6 +430,10 @@ public class BinomialHeap
      * Return the number of trees in the heap.
      *
      */
+    //O(1) - due to the bound of int, it's possible to maintain a treeCount variable but due to complexity of implemention
+    //I chose to calculate it manually.
+    //A simpler way (but still more exhausting) to deal with it and in a O(1) without boundaries
+    // is to calculate numTrees only when calling meld and just update it when required.
     public int numTrees()
     {
         int cnt = 0;
@@ -395,7 +443,7 @@ public class BinomialHeap
                 cnt++;
             }
         }
-        return cnt; // should be replaced by student code
+        return cnt;
     }
 
     /**
