@@ -11,6 +11,7 @@ public class BinomialHeap
     public HeapNode last;
     public HeapNode min;
     public int linksCount;
+    public int ranksDeleted;
 
     public BinomialHeap(){
         size = 0;
@@ -86,6 +87,7 @@ public class BinomialHeap
      */
     public void deleteMin()
     {
+        ranksDeleted += min.rank;
         HeapNode it = first;
         while(it.next != this.min){
             it = it.next;
@@ -180,6 +182,9 @@ public class BinomialHeap
             this.last = heap2.last;
             this.size = heap2.size;
             this.min = heap2.min;
+            return;
+        }
+        if(heap2.empty()){
             return;
         }
         HeapNode sentinel = new HeapNode();
