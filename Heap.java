@@ -1,14 +1,3 @@
-/**
- * BinomialHeap
- *
- * An implementation of binomial heap over non-negative integers.
- * Based on exercise from previous semester.
- */
-
-//username - omerdrori
-//id1      - 216002089
-//#name1   - omer drori
-
 public class BinomialHeap
 {
     public int size;
